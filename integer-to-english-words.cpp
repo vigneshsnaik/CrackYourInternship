@@ -1,51 +1,33 @@
 class Solution {
 public:
-    vector<pair<int, string>> map = {{1000000000, "Billion"},
-                                     {1000000, "Million"},
-                                     {1000, "Thousand"},
-                                     {100, "Hundred"},
-                                     {90, "Ninety"},
-                                     {80, "Eighty"},
-                                     {70, "Seventy"},
-                                     {60, "Sixty"},
-                                     {50, "Fifty"},
-                                     {40, "Forty"},
-                                     {30, "Thirty"},
-                                     {20, "Twenty"},
-                                     {19, "Nineteen"},
-                                     {18, "Eighteen"},
-                                     {17, "Seventeen"},
-                                     {16, "Sixteen"},
-                                     {15, "Fifteen"},
-                                     {14, "Fourteen"},
-                                     {13, "Thirteen"},
-                                     {12, "Twelve"},
-                                     {11, "Eleven"},
-                                     {10, "Ten"},
-                                     {9, "Nine"},
-                                     {8, "Eight"},
-                                     {7, "Seven"},
-                                     {6, "Six"},
-                                     {5, "Five"},
-                                     {4, "Four"},
-                                     {3, "Three"},
-                                     {2, "Two"},
-                                     {1, "One"}};
-
-    string numberToWords(int num) {
-        if (num == 0)
-            return "Zero";
-        string res;
-        for (auto& [n, word] : map) {
-            if (num > n) {
-                cout << num << endl;
-                res += numberToWords(num / n) + word + numberToWords(num % n);
-                num /= n;
-            } else if (num == n) {
-                cout << num << endl;
-                res += word;
-            }
+    string word(int num) {
+        if (num >= 1000000000) {
+            return word(num / 1000000000) + " Billion" +
+                   (num % 1000000000 ? " " : "") + word(num % 1000000000);
+        } else if (num >= 1000000) {
+            return word(num / 1000000) + " Million" +
+                   (num % 1000000 ? " " : "") + word(num % 1000000);
+        } else if (num >= 1000) {
+            return word(num / 1000) + " Thousand" + (num % 1000 ? " " : "") +
+                   word(num % 1000);
+        } else if (num >= 100) {
+            return word(num / 100) + " Hundred" + (num % 100 ? " " : "") +
+                   word(num % 100);
+        } else if (num >= 20) {
+            vector<string> tens = {"",       "Ten",   "Twenty", "Thirty",
+                                   "Forty",  "Fifty", "Sixty",  "Seventy",
+                                   "Eighty", "Ninety"};
+            vector<string> ones = {"",     "One", "Two",   "Three", "Four",
+                                   "Five", "Six", "Seven", "Eight", "Nine"};
+            return tens[num / 10] + (num % 10 ? " " : "") + ones[num % 10];
+        } else {
+            vector<string> ones = {
+                "",        "One",     "Two",       "Three",    "Four",
+                "Five",    "Six",     "Seven",     "Eight",    "Nine",
+                "Ten",     "Eleven",  "Twelve",    "Thirteen", "Fourteen",
+                "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+            return ones[num];
         }
-        return "";
     }
+    string numberToWords(int num) { return num ? word(num) : "Zero"; }
 };
